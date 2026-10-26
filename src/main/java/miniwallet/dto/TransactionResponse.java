@@ -17,4 +17,6 @@ public class TransactionResponse {
     private BigDecimal amount;
     private String type;
     private LocalDateTime createdAt;
+    private String status;
+    private String referenceId;
 }

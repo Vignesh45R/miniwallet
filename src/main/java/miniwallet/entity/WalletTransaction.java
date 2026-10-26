@@ -32,6 +32,12 @@ public class WalletTransaction {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private String status;
+
+    @Column(name = "reference_id")
+    private String referenceId;
+
     @PrePersist
     public void setCreatedAt() {
         createdAt = LocalDateTime.now();

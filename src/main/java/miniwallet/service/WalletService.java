@@ -15,6 +15,7 @@ import miniwallet.dto.TransferRequest;
 import miniwallet.dto.TransferResponse;
 import miniwallet.exception.WalletNotFoundException;
 import miniwallet.exception.DuplicateEmailException;
+import java.util.UUID;
 
 @Service
 public class WalletService {
@@ -121,6 +122,8 @@ public class WalletService {
                     response.setAmount(transaction.getAmount());
                     response.setType(transaction.getType());
                     response.setCreatedAt(transaction.getCreatedAt());
+                    response.setStatus(transaction.getStatus());
+                    response.setReferenceId(transaction.getReferenceId());
 
                     return response;
                 })
@@ -149,6 +152,8 @@ public class WalletService {
             );
         }
 
+        String referenceId = UUID.randomUUID().toString();
+
         BigDecimal fromBalance =
                 fromWallet.getBalance().subtract(amount);
 
@@ -166,10 +171,16 @@ public class WalletService {
         outgoing.setAmount(amount);
         outgoing.setType("TRANSFER_OUT");
 
+        outgoing.setStatus("SUCCESS");
+        outgoing.setReferenceId(referenceId);
+
         WalletTransaction incoming = new WalletTransaction();
         incoming.setWallet(toWallet);
         incoming.setAmount(amount);
         incoming.setType("TRANSFER_IN");
+
+        incoming.setStatus("SUCCESS");
+        incoming.setReferenceId(referenceId);
 
         walletTransactionRepository.save(outgoing);
         walletTransactionRepository.save(incoming);
